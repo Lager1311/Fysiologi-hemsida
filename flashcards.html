@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flashcards – Fysiologi Gy25</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  :root {
+    --bg: #0f0f11;
+    --surface: #18181c;
+    --surface2: #222228;
+    --border: #2e2e38;
+    --border2: #3e3e4e;
+    --text: #f0eff8;
+    --muted: #8886a0;
+    --dim: #55536a;
+
+    --mat-hue: #c8f5a0;
+    --mat-bg: #1a2a10;
+    --mat-border: #3a5520;
+    --mat-glow: rgba(120, 220, 60, 0.12);
+
+    --resp-hue: #a0d8f5;
+    --resp-bg: #0f1f2e;
+    --resp-border: #1e4060;
+    --resp-glow: rgba(60, 160, 240, 0.12);
+
+    --cirk-hue: #f5a0c0;
+    --cirk-bg: #2a1020;
+    --cirk-border: #551535;
+    --cirk-glow: rgba(240, 60, 120, 0.12);
+
+    --accent: #c8b4ff;
+    --accent-bg: rgba(180,140,255,0.08);
+
+    --card-radius: 20px;
+    --transition: 0.55s cubic-bezier(0.34, 1.4, 0.64, 1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 1rem 4rem;
+    overflow-x: hidden;
+  }
+
+  /* Ambient background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 10%, rgba(100,60,200,0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 50% at 80% 80%, rgba(40,120,200,0.05) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap { position: relative; z-index: 1; width: 100%; max-width: 780px; }
+
+  /* Header */
+  header {
+    text-align: center;
+    padding: 3rem 0 2rem;
+  }
+
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+  }
+
+  header h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  header p {
+    font-size: 0.875rem;
+    color: var(--muted);
+    font-weight: 300;
+    letter-spacing: 0.04em;
+  }
+
+  /* Category tabs */
+  .tabs {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .tab {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 7px 18px;
+    border-radius: 999px;
+    border: 1px solid var(--border2);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .tab:hover { color: var(--text); border-color: var(--border2); }
+
+  .tab.active-mat {
+    background: var(--mat-bg);
+    border-color: var(--mat-border);
+    color: var(--mat-hue);
+    box-shadow: 0 0 16px var(--mat-glow);
+  }
+  .tab.active-resp {
+    background: var(--resp-bg);
+    border-color: var(--resp-border);
+    color: var(--resp-hue);
+    box-shadow: 0 0 16px var(--resp-glow);
+  }
+  .tab.active-cirk {
+    background: var(--cirk-bg);
+    border-color: var(--cirk-border);
+    color: var(--cirk-hue);
+    box-shadow: 0 0 16px var(--cirk-glow);
+  }
+
+  /* Controls row */
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 1.75rem;
+    flex-wrap: wrap;
+  }
+
+  .counter {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .counter strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .btn-group { display: flex; gap: 8px; }
+
+  .btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 7px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border2);
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+
+  .btn:hover {
+    background: var(--surface2);
+    color: var(--text);
+    border-color: var(--border2);
+  }
+
+  .btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  .btn.active-toggle {
+    background: var(--accent-bg);
+    border-color: rgba(180,140,255,0.3);
+    color: var(--accent);
+  }
+
+  /* Progress bar */
+  .progress-track {
+    height: 3px;
+    background: var(--surface2);
+    border-radius: 99px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--accent), #a0c8ff);
+    transition: width 0.4s ease;
+  }
+
+  /* Card stage */
+  .stage {
+    perspective: 1400px;
+    margin-bottom: 1.5rem;
+    cursor: pointer;
+  }
+
+  .card-inner {
+    position: relative;
+    width: 100%;
+    height: 320px;
+    transform-style: preserve-3d;
+    transition: transform var(--transition);
+    border-radius: var(--card-radius);
+  }
+
+  .card-inner.flipped { transform: rotateY(180deg); }
+
+  .card-face {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--card-radius);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem;
+    text-align: center;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .card-face.front { background: var(--surface); }
+
+  .card-face.back {
+    background: var(--surface2);
+    transform: rotateY(180deg);
+  }
+
+  /* Category colour theming for cards */
+  .cat-mat .card-face.front {
+    border-color: var(--mat-border);
+    box-shadow: 0 0 40px var(--mat-glow), inset 0 1px 0 rgba(200,245,160,0.06);
+  }
+  .cat-mat .card-face.back {
+    border-color: var(--mat-border);
+    box-shadow: 0 0 40px var(--mat-glow);
+  }
+
+  .cat-resp .card-face.front {
+    border-color: var(--resp-border);
+    box-shadow: 0 0 40px var(--resp-glow), inset 0 1px 0 rgba(160,216,245,0.06);
+  }
+  .cat-resp .card-face.back {
+    border-color: var(--resp-border);
+    box-shadow: 0 0 40px var(--resp-glow);
+  }
+
+  .cat-cirk .card-face.front {
+    border-color: var(--cirk-border);
+    box-shadow: 0 0 40px var(--cirk-glow), inset 0 1px 0 rgba(245,160,192,0.06);
+  }
+  .cat-cirk .card-face.back {
+    border-color: var(--cirk-border);
+    box-shadow: 0 0 40px var(--cirk-glow);
+  }
+
+  /* Decorative corner accent */
+  .card-face::after {
+    content: '';
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    opacity: 0.04;
+  }
+  .cat-mat .card-face::after { background: var(--mat-hue); }
+  .cat-resp .card-face::after { background: var(--resp-hue); }
+  .cat-cirk .card-face::after { background: var(--cirk-hue); }
+
+  .cat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1.4rem;
+    padding: 4px 12px;
+    border-radius: 999px;
+    border: 1px solid;
+  }
+
+  .cat-mat .cat-label { color: var(--mat-hue); border-color: var(--mat-border); background: var(--mat-bg); }
+  .cat-resp .cat-label { color: var(--resp-hue); border-color: var(--resp-border); background: var(--resp-bg); }
+  .cat-cirk .cat-label { color: var(--cirk-hue); border-color: var(--cirk-border); background: var(--cirk-bg); }
+
+  .card-term {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    line-height: 1.2;
+    color: var(--text);
+    margin-bottom: 0.6rem;
+  }
+
+  .card-hint {
+    font-size: 0.75rem;
+    color: var(--dim);
+    margin-top: 1.2rem;
+  }
+
+  .card-hint svg { display: inline; vertical-align: middle; width: 13px; height: 13px; margin-right: 4px; }
+
+  .card-def {
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(0.9rem, 2.5vw, 1.05rem);
+    line-height: 1.7;
+    color: var(--text);
+    font-weight: 300;
+  }
+
+  .card-def strong {
+    font-weight: 500;
+    color: #d0ccff;
+  }
+
+  /* Nav buttons */
+  .nav-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 2rem;
+  }
+
+  .nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 1px solid var(--border2);
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.18s;
+    font-size: 0;
+  }
+
+  .nav-btn:hover:not(:disabled) {
+    background: var(--surface2);
+    color: var(--text);
+    border-color: var(--border2);
+    transform: scale(1.05);
+  }
+
+  .nav-btn:disabled { opacity: 0.25; cursor: default; }
+
+  .nav-btn svg { width: 20px; height: 20px; }
+
+  .nav-btn.flip-btn {
+    width: 64px;
+    height: 64px;
+    background: var(--surface2);
+    border-color: var(--border2);
+    color: var(--text);
+  }
+
+  .nav-btn.flip-btn:hover {
+    background: #28282f;
+    transform: scale(1.06);
+  }
+
+  /* Card list preview */
+  .list-section {
+    margin-top: 1rem;
+  }
+
+  .list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+  }
+
+  .list-header h3 {
+    font-size: 0.75rem;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--dim);
+    font-weight: 500;
+  }
+
+  .list-toggle {
+    font-size: 0.75rem;
+    color: var(--muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.04em;
+    transition: color 0.15s;
+  }
+  .list-toggle:hover { color: var(--text); }
+
+  .term-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 8px;
+  }
+
+  .term-chip {
+    font-size: 0.8rem;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: left;
+    line-height: 1.3;
+  }
+
+  .term-chip:hover {
+    color: var(--text);
+    border-color: var(--border2);
+    background: var(--surface2);
+  }
+
+  .term-chip.current-chip {
+    border-color: rgba(180,140,255,0.4);
+    color: var(--accent);
+    background: var(--accent-bg);
+  }
+
+  .list-hidden { display: none; }
+
+  /* Done state */
+  .done-overlay {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 3rem 2rem;
+    border: 1px solid var(--border);
+    border-radius: var(--card-radius);
+    background: var(--surface);
+    text-align: center;
+    height: 320px;
+  }
+
+  .done-overlay.show { display: flex; }
+
+  .done-icon {
+    font-size: 2.5rem;
+    line-height: 1;
+  }
+
+  .done-overlay h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem;
+    color: var(--text);
+  }
+
+  .done-overlay p {
+    font-size: 0.875rem;
+    color: var(--muted);
+    max-width: 300px;
+    line-height: 1.6;
+  }
+
+  .done-overlay .btn {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    padding: 10px 22px;
+    border-radius: 12px;
+    color: var(--accent);
+    border-color: rgba(180,140,255,0.3);
+    background: var(--accent-bg);
+  }
+
+  .keyboard-hint {
+    text-align: center;
+    font-size: 0.72rem;
+    color: var(--dim);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.04em;
+    margin-top: -0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .key {
+    display: inline-block;
+    border: 1px solid var(--border2);
+    border-radius: 5px;
+    padding: 1px 6px;
+    background: var(--surface2);
+  }
+
+</style>
+</head>
+<body>
+<div id="site-nav"></div>
+<div class="wrap">
+
+<header>
+  <h1>Fysiologi <em>Flashcards</em></h1>
+  <p>Biologi 1 &nbsp;·&nbsp; Gy25 &nbsp;·&nbsp; Matspjälkning · Respiration · Cirkulation</p>
+</header>
+
+<!-- Category tabs -->
+<div class="tabs">
+  <button class="tab active-mat" data-cat="all">Alla</button>
+  <button class="tab" data-cat="mat">Matspjälkning</button>
+  <button class="tab" data-cat="resp">Respiration</button>
+  <button class="tab" data-cat="cirk">Cirkulation</button>
+</div>
+
+<!-- Controls -->
+<div class="controls">
+  <div class="counter">Kort <strong id="cur">1</strong> av <strong id="total">–</strong></div>
+  <div class="btn-group">
+    <button class="btn" id="dirBtn" onclick="toggleDir()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 16V4m0 0L3 8m4-4 4 4"/><path d="M17 8v12m0 0 4-4m-4 4-4-4"/></svg>
+      <span id="dirLabel">Begrepp → Förklaring</span>
+    </button>
+    <button class="btn" onclick="shuffle()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18h1.4c.8 0 1.6-.4 2.1-1l10.1-12c.5-.6 1.3-1 2.1-1H22"/><path d="m19 16 3 2-3 2"/><path d="M2 6h1.9c.8 0 1.6.4 2.1 1l4 4.9"/><path d="m19 8 3-2-3-2"/></svg>
+      Blanda
+    </button>
+  </div>
+</div>
+
+<!-- Progress -->
+<div class="progress-track">
+  <div class="progress-fill" id="progress" style="width:0%"></div>
+</div>
+
+<!-- Card -->
+<div class="stage" id="stage" onclick="flipCard()">
+  <div class="card-inner" id="cardInner">
+    <div class="card-face front" id="frontFace">
+      <span class="cat-label" id="frontCat">—</span>
+      <div class="card-term" id="frontTerm">–</div>
+      <div class="card-hint">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        Klicka för att vända
+      </div>
+    </div>
+    <div class="card-face back" id="backFace">
+      <span class="cat-label" id="backCat">—</span>
+      <div class="card-def" id="backDef">–</div>
+    </div>
+  </div>
+</div>
+
+<!-- Done state -->
+<div class="done-overlay" id="doneOverlay">
+  <div class="done-icon">✦</div>
+  <h2>Alla kort klara!</h2>
+  <p>Du har gått igenom alla kort i den här kategorin. Blanda och börja om, eller välj en annan kategori.</p>
+  <button class="btn" onclick="restart()">Börja om från början</button>
+</div>
+
+<!-- Nav -->
+<div class="nav-row">
+  <button class="nav-btn" id="prevBtn" onclick="prev()" title="Föregående" disabled>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    Föregående
+  </button>
+  <button class="nav-btn flip-btn" onclick="flipCard()" title="Vänd kortet">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+    Vänd
+  </button>
+  <button class="nav-btn" id="nextBtn" onclick="next()" title="Nästa">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    Nästa
+  </button>
+</div>
+
+<div class="keyboard-hint">
+  <span class="key">←</span> Föregående &nbsp;&nbsp;
+  <span class="key">Mellanslag</span> Vänd &nbsp;&nbsp;
+  <span class="key">→</span> Nästa
+</div>
+
+<!-- Term list -->
+<div class="list-section">
+  <div class="list-header">
+    <h3 id="listCountLabel">Alla begrepp</h3>
+    <button class="list-toggle" onclick="toggleList()" id="listToggleBtn">Visa lista ↓</button>
+  </div>
+  <div class="term-grid list-hidden" id="termGrid"></div>
+</div>
+
+</div><!-- /wrap -->
+
+<script src="js/nav.js"></script>
+<script src="js/flashcards.js"></script>
+<script>
+/* ALL_CARDS laddas från js/flashcards.js – gammal inline-kopia nedan ignoreras */
+const _OLD_INLINE = [
+  // ─── MATSPJÄLKNING ───────────────────────────────────────────────
+  {cat:'mat', term:'Autotrof', def:'Organism som kan tillverka sin egen näring, t.ex. via fotosyntes. Växter och alger är autotrofer – de behöver inte äta för att få energi.'},
+  {cat:'mat', term:'Heterotrof', def:'Organism som måste äta organiska ämnen för att få energi och byggmaterial. Människor och djur är heterotrofer.'},
+  {cat:'mat', term:'Herbivorer', def:'Växtätande djur. Har långa mag-tarmkanaler och specialiserade anpassningar för att bryta ned cellulosa.'},
+  {cat:'mat', term:'Karnivorer', def:'Köttätande djur. Har kortare mag-tarmkanaler eftersom animalisk föda bryts ned snabbare och enklare.'},
+  {cat:'mat', term:'Omnivorer', def:'Allätande djur som äter både växter och kött. Människan är ett omnivorer med ett mellanting av matspjälkningssystem.'},
+  {cat:'mat', term:'Kolhydrater', def:'Organiska molekyler uppbyggda av kol, väte och syre. Kroppens primära energikälla; bryts ned till monosackarider (framförallt glukos) som förbränns till ATP.'},
+  {cat:'mat', term:'Fett (glycerol & fettsyra)', def:'Lipid uppbyggd av en glycerolmolekyl med upp till tre fettsyror. Kroppens viktigaste energireserv och byggsten i cellmembran. Innehåller ca dubbelt så mycket energi per gram som kolhydrater.'},
+  {cat:'mat', term:'Protein', def:'Stor molekyl uppbyggd av aminosyror. Fungerar som enzymer, strukturproteiner, transportmolekyler och hormoner. Kan inte lagras – överskott bryts ned i levern.'},
+  {cat:'mat', term:'Vitamin (fettlösliga & vattenlösliga)', def:'Organiska molekyler kroppen behöver i liten mängd. Fettlösliga (A, D, E, K) lagras i fettvävnad. Vattenlösliga (B, C) lagras inte utan måste tillföras dagligen.'},
+  {cat:'mat', term:'Mineraler (oorganiska joner)', def:'Oorganiska ämnen som kalcium, järn och natrium. Byggstenar och reglerar biologiska processer, t.ex. muskelkontraktion och nervimpulser.'},
+  {cat:'mat', term:'Tunntarm', def:'5–7 meter lång del av matspjälkningskanalen där merparten av kemisk nedbrytning och absorption av näring sker. Övre delen kallas tolvfingertarmen.'},
+  {cat:'mat', term:'Tjocktarm', def:'Absorberar vatten och salter från kvarvarande mag-tarminnehåll. Bestämmer avföringens konsistens och hyser normalfloran.'},
+  {cat:'mat', term:'Ändtarm', def:'Tillfälligt förråd för avföring. Avföring ansamlas tills mekanoreceptorer signalerar toalettbehov. Kontrolleras av inre (ofrivillig) och yttre (frivillig) sfinkter.'},
+  {cat:'mat', term:'Matstrupe', def:'Rör som förbinder svalget med magsäcken. Transporterar mat via peristaltiska rörelser; tyngdkraften är inte avgörande.'},
+  {cat:'mat', term:'Saltsyra', def:'HCl. Produceras i magsäcksväggen och sänker pH till ~2. Dödar bakterier, denaturerar proteiner och aktiverar pepsinogen till pepsin.'},
+  {cat:'mat', term:'Denaturera', def:'När ett proteins tredimensionella struktur bryts ned (utan att peptidkedjorna klyvs). I magsäcken gör saltsyran detta med proteiner, vilket gör det lättare för enzymer att bryta ned dem.'},
+  {cat:'mat', term:'Enzym', def:'Biologisk katalysator (vanligen protein) som snabbar upp kemiska reaktioner utan att förbrukas. Specifika – varje enzym passar bara en typ av substrat.'},
+  {cat:'mat', term:'Munhålan', def:'Matspjälkningens startpunkt. Tänder gör mekanisk nedbrytning; saliv med amylas gör kemisk nedbrytning av stärkelse.'},
+  {cat:'mat', term:'Saliv & spottkörtel', def:'Spottkörtelarna producerar saliv. Saliv innehåller vatten, slem (smörjer), och enzymet amylas som startar nedbrytningen av stärkelse.'},
+  {cat:'mat', term:'Lever', def:'Multiuppgiftsorgan: bryter ned gifter, lagrar glykogen, producerar galla (gallsalter och bilirubin), bildar urinämne från aminosyranedbrytning.'},
+  {cat:'mat', term:'Gallblåsan', def:'Reservoar under levern där gallan koncentreras. Tömmer sig via gallgångar till tolvfingertarmen när fet mat anländer.'},
+  {cat:'mat', term:'Bukspottkörteln', def:'Producerar bukspott (alkaliskt, innehåller amylas, lipas, proteaser, nukleaser) och hormonerna insulin och glukagon.'},
+  {cat:'mat', term:'Blindtarmen', def:'Caecum. Hos växtätare viktig för cellulosanedbrytning via bakterier. Hos människan trolig roll i immunförsvaret. Köttätare har mycket liten blindtarm.'},
+  {cat:'mat', term:'Amylas', def:'Enzym som bryter ned stärkelse (polysackarider) till kortare sockerarter. Finns i saliven och i bukspottet.'},
+  {cat:'mat', term:'Villi (tarmludd)', def:'Fingerformade utskott på tunntarmens innersida. Ökar absorptionsytan dramatiskt. Varje villus täckt av mikrovilli (ger total yta ~200 m²).'},
+  {cat:'mat', term:'Pepsin', def:'Aktivt proteolytiskt enzym i magsäcken. Bryter ned proteiner till kortare peptidkedjor. Aktiveras från pepsinogen av saltsyra.'},
+  {cat:'mat', term:'Pepsinogen', def:'Inaktivt proenzym utsöndrat av huvudcellerna. Omvandlas till aktivt pepsin i magsäckens sura miljö. Inaktiv form skyddar väggen från självnedbrytning.'},
+  {cat:'mat', term:'Galla', def:'Produceras i levern, lagras i gallblåsan. Innehåller gallsalter (emulgerar fett), bilirubin och hormoner. Höjer pH i tolvfingertarmen.'},
+  {cat:'mat', term:'Gallsalter', def:'Biologiska "tvättmedel" i gallan. Finfördelar stora fettdroppar till många små (emulgering), vilket ökar ytan för lipasets verkan. Är inte enzymer.'},
+  {cat:'mat', term:'Tolvfingertarmen', def:'Duodenum – tunntarmens översta ~25 cm. Navet för kemisk nedbrytning; tar emot galla från gallblåsan och bukspott från bukspottkörteln.'},
+  {cat:'mat', term:'Lipas', def:'Enzym som bryter ned fetter (triglycerider) till fettsyror och glycerol. Produceras av bukspottkörteln; gallsalter krävs för effektiv verkan.'},
+  {cat:'mat', term:'Proteaser', def:'Grupp av enzymer som bryter ned proteiner till korta peptider och aminosyror. Inkluderar pepsin (magsäck) och bukspottets trypsin/chymotrypsin.'},
+  {cat:'mat', term:'Bukspott', def:'Alkalisk vätska från bukspottkörteln. Neutraliserar det sura innehållet från magsäcken och tillför enzymer (amylas, lipas, proteaser, nukleaser).'},
+  {cat:'mat', term:'Mikrovilli', def:'Extremt täta, finförgrenade utskott på varje villi-cell. Bildar "borstbrämet". Ökar tunntarmens totala absorptionsyta till ~200 m².'},
+  {cat:'mat', term:'Lymfkärl', def:'I tunntarmens villi transporterar lymfkärlen fetter (kylomikroner) som är för stora för blodkapillärerna. Lymfan återansluts till blodet via hålvenen.'},
+  {cat:'mat', term:'Peristaltik (peristaltisk rörelse)', def:'Koordinerad sammandragning och avslappning av glatt muskulatur i matspjälkningskanalen. Transporterar maten framåt oberoende av tyngdkraften.'},
+  {cat:'mat', term:'Blandningsrörelser', def:'Rörelser i magsäck och tunntarm som knådar och blandar innehållet med enzymer, utan att föra det framåt. Ökar kontaktytan.'},
+  {cat:'mat', term:'Helicobacter pylori', def:'Bakterie som orsakar magsår. Producerar ammoniak (basiskt) och gifter som förstör epitelcellerna i magsäcken, och låter saltsyran tränga igenom.'},
+  {cat:'mat', term:'Bilirubin', def:'Gulbrunt nedbrytningsprodukt från gamla röda blodkroppar. Ingår i gallan och ger avföring och galla sin färg.'},
+  {cat:'mat', term:'Sfinktrar', def:'Ringformade muskler som reglerar öppningar i matspjälkningskanalen, t.ex. vid pylorus (magsäck→tolvfingertarm) och ändtarmen. Kontrollerar flödet.'},
+  {cat:'mat', term:'Fria radikaler', def:'Molekyler/atomer med ett eller flera oparade elektroner. Extremt reaktiva – "stjäl" elektroner från DNA, proteiner och membraner. Bildas vid ämnesomsättning och immunförsvar.'},
+  {cat:'mat', term:'Antioxidanter', def:'Ämnen som neutraliserar fria radikaler genom att avge en elektron utan att själva destabiliseras. T.ex. vitamin C, E och betakaroten.'},
+  {cat:'mat', term:'Gomsegel', def:'Mjuka gommen bak i munhålan. Stängs vid sväljning för att hindra mat från att hamna i näsan.'},
+  {cat:'mat', term:'Glattmuskulatur', def:'Ofrivillig muskulatur i matspjälkningskanalens väggar. Styrs av autonoma nervsystemet. Utför peristaltik och blandningsrörelser.'},
+  {cat:'mat', term:'Epitelceller', def:'Celler som bildar det skyddande innerlagret i matspjälkningskanalen. I magsäcken producerar de saltsyra, pepsinogen och slem.'},
+  {cat:'mat', term:'Struplock', def:'Epiglottis – broskplatta som fälls ner vid sväljning och täcker luftstrupens öppning, så att mat inte hamnar i lungorna.'},
+  {cat:'mat', term:'Magsäck', def:'Töjbar muskelisk påse (~2 liter) där mat bearbetas 2–6 timmar. Producerar magsaft (HCl, pepsinogen, slem) och gör blandningsrörelser.'},
+  {cat:'mat', term:'Magsaft', def:'Vätska producerad av magsäcken. Innehåller saltsyra (HCl), pepsinogen och slem. pH ≈ 2.'},
+  {cat:'mat', term:'Magsår', def:'Sår på magsäckens eller tunntarmens slemhinna. Orsakas av H. pylori-infektion eller när saltsyra/pepsin förstör epitelcellerna snabbare än de läker.'},
+  {cat:'mat', term:'Metabolism', def:'Alla biokemiska reaktioner i kroppen. Delas i katabola (nedbrytande, t.ex. cellandning) och anabola (uppbyggande, t.ex. proteinsyntes) reaktioner.'},
+  {cat:'mat', term:'Normalflora (symbiotiska mikroorganismer)', def:'Bakterier och andra mikroorganismer i tarmarna som lever i mutualistisk symbios med kroppen. Hjälper bryta ned fibrer, producerar vitaminer (t.ex. K) och stärker immunförsvaret.'},
+  {cat:'mat', term:'Glykogen', def:'Lagringsform av glukos i lever och muskler. Polysackarid som snabbt kan brytas ned till glukos vid energibehov.'},
+  {cat:'mat', term:'Idissla', def:'Matar idisslare (t.ex. kor) hämtar upp och tuggar om födan en extra gång. Mikroorganismer i vommen fermenterar cellulosa.'},
+
+  // ─── RESPIRATION ─────────────────────────────────────────────────
+  {cat:'resp', term:'Diffusion', def:'Spontan rörelse av molekyler från hög koncentration till låg koncentration längs koncentrationsgradienten. Drivkraften för gasutbyte i lungor och vävnader.'},
+  {cat:'resp', term:'Koncentrationsgraden', def:'Skillnaden i koncentration av ett ämne mellan två områden. Ju större gradient, desto snabbare och effektivare diffusion.'},
+  {cat:'resp', term:'Gasutbyte', def:'Processen där syre tas upp och koldioxid avges, antingen i lungorna (från luft till blod) eller i vävnaderna (från blod till celler).'},
+  {cat:'resp', term:'Gälar (yttre och inre)', def:'Vattenanpassat andningsorgan hos fiskar och grodlarver. Yttre gälar sitter på kroppen (oskyddade), inre gälar i skyddad gälkammare med enkelriktat vattenflöde.'},
+  {cat:'resp', term:'Motströmningsprincipen', def:'Blod och vatten flödar i motsatta riktningar i fiskgälar. Upprätthåller ständig koncentrationsgradient längs hela gälen → maximalt effektivt gasutbyte.'},
+  {cat:'resp', term:'Luftstrupe', def:'Trakea. ~10 cm lång, hålls öppen av broskringar. Slemhinna och cilier fångar och transporterar partiklar bort från lungorna.'},
+  {cat:'resp', term:'Bronker', def:'Två grenar av luftstrupen (en per lunga). Samma uppbyggnad som luftstrupen med broskringar, slem och cilier.'},
+  {cat:'resp', term:'Bronkioler', def:'Finaste förgreningarna av bronkerna. Leder luften till alveolerna. Saknar brosk – kan vidgas/snävas av glatt muskulatur.'},
+  {cat:'resp', term:'Alveoler', def:'Lungblåsor – tunna säckar (ett celllager) i änden av bronkiolerna. Omgivna av kapillärer. Total yta ~70–140 m². Platsen för gasutbytet.'},
+  {cat:'resp', term:'Cilier/flimmerhår', def:'Hårfina utskott på slemhinnan i luftvägarna. Transporterar slem (med fångade partiklar/bakterier) uppåt mot svalget. Förlamat av nikotin.'},
+  {cat:'resp', term:'Diafragma', def:'Mellangärdet – platt muskel under lungorna. Kontraherar vid inandning (sänks → bröstkorgsvolym ökar → undertryck). Slappnar av vid utandning.'},
+  {cat:'resp', term:'Lunglober', def:'Lungorna är indelade i lober: höger lunga har 3, vänster 2 (pga hjärtat). Varje lob försörjs av en egen bronk.'},
+  {cat:'resp', term:'Andningsmekanismen', def:'Tryckstyrd process. Inandning: diafragma sänks → volym ökar → tryck sjunker → luft strömmar in. Utandning (passiv): diafragma välver upp → volym minskar → luft pressas ut.'},
+  {cat:'resp', term:'Vitalkapacitet', def:'Maximal luftmängd som kan andas ut efter en maximal inandning. Mäter lungkapaciteten. Minskar vid KOL och emfysem.'},
+  {cat:'resp', term:'Residualvolym (Restvolym)', def:'~1,2 liter luft som alltid finns kvar i lungorna och inte kan andas ut. Håller alveolerna öppna och förhindrar att lungorna kollapsar.'},
+  {cat:'resp', term:'Tidalvolym', def:'Luftmängden vid ett normalt andetag i vila, ca 500 ml. Av dessa når bara ~350 ml alveolerna (resten stannar i dead-space).'},
+  {cat:'resp', term:'Andningscentrum', def:'Nervcentrum i hjärnstammen som styr andningsrytmen. Känsligt för koldioxidhalt och pH i blodet – hög CO₂/lågt pH ökar andningsfrekvensen.'},
+  {cat:'resp', term:'Kapillärer', def:'Minsta blodkärlen med vägg av ett enda celllager. Omger alveolerna tätt – kort diffusionsväg (<1 µm) möjliggör effektivt gasutbyte.'},
+  {cat:'resp', term:'Röda blodkroppar', def:'Erytrocyter. Packade med hemoglobin, saknar cellkärna. Transporterar syre (och en del CO₂). Lever ~120 dagar.'},
+  {cat:'resp', term:'Hemoglobin', def:'Järnhaltigt protein i röda blodkroppar. Binder 4 syremolekyler per molekyl. Binder O₂ i lungorna, släpper det i aktiv vävnad (vid lågt pH/hög CO₂).'},
+  {cat:'resp', term:'Koldioxid', def:'CO₂. Avfallsprodukt från cellandningen. Transporteras i blodet som vätekarbonat (75–80%), bundet till Hb (10–20%) eller löst i plasma (5–10%).'},
+  {cat:'resp', term:'Kolsyra', def:'H₂CO₃. Bildas när CO₂ reagerar med vatten i blodet: CO₂ + H₂O ⇌ H₂CO₃. Dissocierar till vätekarbonat och vätejoner, vilket sänker blodets pH.'},
+  {cat:'resp', term:'Vätekarbonat', def:'HCO₃⁻. Transportform för 75–80% av kroppens koldioxid i blodet. Bildas när kolsyra dissocierar. I lungorna sker processen baklänges.'},
+  {cat:'resp', term:'pH', def:'Mått på surhet/basiskhet. Blodets normala pH är ~7,4. Sjunker (surare) vid hög CO₂/koldioxidansamling → signalerar ökat andningsbehov.'},
+  {cat:'resp', term:'Syrgas', def:'O₂. Tas upp i alveolerna via diffusion och transporteras bundet till hemoglobin. Förbrukas i mitokondrierna vid cellandning.'},
+  {cat:'resp', term:'Kolmonoxid', def:'CO. Färglös, luktlös gas vid ofullständig förbränning. Binder till hemoglobin ~200× starkare än O₂ → blockerar syretransport → kvävning trots tillgängligt syre.'},
+  {cat:'resp', term:'Trakeér', def:'Insekters luftrörsystem. Grenat rörsystem av luftrör (trakeoler) som leder luft direkt till vävnaderna utan att gå via blodet. Effektivt men storleksbegränsande.'},
+  {cat:'resp', term:'Luftsäckar', def:'Hos fåglar: säckar kopplade till lungorna som styr ett enkelriktat luftflöde genom parabronkiala rör vid både in- och utandning. Ger det effektivaste lundsystemet bland ryggradsdjur.'},
+  {cat:'resp', term:'Lunginflammation', def:'Infektion (bakteriell/viral) i alveolerna. Alveolerna fylls med vätska/pus → minskat gasutbyte → andningssvårigheter.'},
+  {cat:'resp', term:'Emfysem', def:'Förstöring av alveolernas väggar. Minskar gasutbytesytan dramatiskt → kronisk andnöd. Vanlig följd av långvarig rökning.'},
+  {cat:'resp', term:'KOL', def:'Kroniskt obstruktiv lungsjukdom. Kombination av luftvägsinflammation och emfysem. Ger försämrat luftflöde, andfåddhet, hosta. Orsakas nästan alltid av rökning.'},
+  {cat:'resp', term:'Dead-space', def:'Volymen luft (~150 ml) i luftvägar som deltar i andningen men inte når alveolerna och inte bidrar till gasutbyte. Av 500 ml tidalvolym når ~350 ml faktiskt alveolerna.'},
+
+  // ─── CIRKULATION ─────────────────────────────────────────────────
+  {cat:'cirk', term:'Artärer (lung-/kropp-)', def:'Leder blod från hjärtat. Tjocka, elastiska väggar tål högt tryck. Lungartären = syrefattigt blod till lungorna. Kroppens artärer = syrerikt blod till organen.'},
+  {cat:'cirk', term:'Vener (lung-/kropp-)', def:'Leder blod till hjärtat. Tunnare väggar, lägre tryck, innehåller venklaffar. Lungven = syrerikt blod till hjärtat. Kroppsvener = syrefattigt blod till höger förmak.'},
+  {cat:'cirk', term:'Kapillärer', def:'Minsta blodkärlen (ett cellager tjocka). Enda platsen för verkligt ämnesutbyte – syre, näring och koldioxid diffunderar/filtreras mellan blod och vävnader.'},
+  {cat:'cirk', term:'Kranskärl', def:'Artärer som löper längs hjärtats yta och försörjer hjärtmuskeln med syre och näring. Om de täpps till uppstår hjärtinfarkt.'},
+  {cat:'cirk', term:'Blodtryck', def:'Det tryck blodet utövar på kärlväggarna. Anges som systoliskt/diastoliskt (t.ex. 120/80 mmHg). Höjs av hjärtkontraktion, sänks när hjärtat vilar.'},
+  {cat:'cirk', term:'Systoliskt / Diastoliskt tryck', def:'Systoliskt (~120 mmHg): trycket när hjärtats kamrar kontraherar. Diastoliskt (~80 mmHg): trycket när hjärtat vilar och kamrarna fylls.'},
+  {cat:'cirk', term:'Hålven', def:'Stora vener (övre och nedre hålvenen) som samlar upp syrefattigt blod från hela kroppen och leder det till hjärtats högra förmak.'},
+  {cat:'cirk', term:'Aorta', def:'Kroppens största artär (diameter ~2,5 cm). Utgår från vänster kammare. Kranskärlen löper härifrån. Elastiska väggar buffrar tryckstötar.'},
+  {cat:'cirk', term:'Lilla kretsloppet', def:'Lungkretsloppet. Höger kammare → lungartär → lungor (syresättning/CO₂-avgång) → lungven → vänster förmak.'},
+  {cat:'cirk', term:'Stora kretsloppet', def:'Kroppskretsloppet. Vänster kammare → aorta → artärer → kapillärer (vävnadsutbyte) → vener → hålvener → höger förmak.'},
+  {cat:'cirk', term:'Segelklaff', def:'Atrioventrikulärklaff mellan förmak och kammare. Stängs under systole för att hindra blod från att flöda bakåt från kammare till förmak.'},
+  {cat:'cirk', term:'Fickklaff', def:'Halvmåneklaff vid utloppet från kamrarna (aorta och lungartären). Öppnas under systole, stängs under diastole – förhindrar bakflöde från artär till kammare.'},
+  {cat:'cirk', term:'Slagvolym', def:'Blodmängden som pumpas ut per hjärtslag, ~70 ml i vila. Ökar vid träning.'},
+  {cat:'cirk', term:'Minutvolym', def:'Totalt pumpat blod per minut. Slagvolym × pulsfrekvens ≈ 70 ml × 70 slag/min ≈ 5 l/min i vila. Kan öka till ~25 l/min vid hårt arbete.'},
+  {cat:'cirk', term:'Sfinktrar', def:'Ringmuskler vid kapillärernas ingång. Reglerar blodflödet till enskilda kapillärnät beroende på vävnadens aktivitet.'},
+  {cat:'cirk', term:'Ämnesutbyte i kapillärerna', def:'Sker via diffusion och filtration. Det hydrostatiska trycket driver ut vätska vid ingångssidan; osmotiskt tryck (blodproteiner) suger tillbaka ~99% vid utgångssidan.'},
+  {cat:'cirk', term:'Diffusion och filtration', def:'Diffusion: rörelse längs koncentrationsgradient. Filtration: hydrostatiskt tryck pressar vätska ut ur kapillärer till vävnaden. Båda driver ämnesutbytet i kapillärbäddar.'},
+  {cat:'cirk', term:'Blodproteiner', def:'T.ex. albumin i blodplasman. Skapar det osmotiska trycket som suger tillbaka vävnadsvätska till kapillärerna. Låga nivåer → ödem.'},
+  {cat:'cirk', term:'Ödem', def:'Svullnad orsakad av ansamling av vävnadsvätska. Uppstår vid lågt blodprotein, högt blodtryck eller blockerade lymfkärl – balansen mellan filtration och reabsorption rubbas.'},
+  {cat:'cirk', term:'Hydrostatiska trycket', def:'Det tryck blodet utövar på kapillärväggarna. Högt vid ingångssidan → driver filtration av vätska ut i vävnaden.'},
+  {cat:'cirk', term:'Vattenpotential / osmotiska trycket', def:'Trycket som uppstår pga löstas (proteiners) koncentration i blodet. Suger tillbaka vätska från vävnaden till kapillärerna vid utgångssidan.'},
+  {cat:'cirk', term:'Homeostas', def:'Kroppens förmåga att upprätthålla ett stabilt inre tillstånd (t.ex. temperatur, pH, blodsocker) trots yttre förändringar. Cirkulationssystemet är centralt.'},
+  {cat:'cirk', term:'Endoterma (jämnvarma djur)', def:'Däggdjur och fåglar. Producerar kroppsvärme internt via hög ämnesomsättning. Kräver effektivt cirkulationssystem och fyrrummigt hjärta.'},
+  {cat:'cirk', term:'Ektoterma (växelvarma djur)', def:'Fiskar, reptiler, amfibier. Beroende av omgivningstemperaturen. Lägre metabolismkrav – klarar sig med enkelt eller trerummigt hjärta.'},
+  {cat:'cirk', term:'Blodplasma', def:'55% av blodet. Innehåller ~90% vatten, proteiner (albumin, fibrinogen), näring, hormoner och avfallsprodukter.'},
+  {cat:'cirk', term:'Fibrinogen', def:'Plasmaprotein som vid skada omvandlas till fibrin – klibbiga trådar som bildar ett koagel och tätar såret.'},
+  {cat:'cirk', term:'Fibrin', def:'Aktiverad form av fibrinogen. Bildar ett nät av trådar som fångar blodkroppar och tätar skadade blodkärl vid koagulering.'},
+  {cat:'cirk', term:'Röda blodkroppar (erytrocyter)', def:'Bär hemoglobin för syretransport. Saknar cellkärna och organeller – maximerar plats för Hb. Bikonkav form ökar yta. Lever ~120 dagar.'},
+  {cat:'cirk', term:'Vita blodkroppar (leukocyter)', def:'Immunförsvarets celler. Identifierar och bekämpar patogener, producerar antikroppar. Finns i lymfknutor och blod.'},
+  {cat:'cirk', term:'Blodplättar (trombocyter)', def:'Cellfragment viktiga för blodkoagulering. Aktiveras vid kärlskada och bildar tillsammans med fibrin ett tätnande koagel.'},
+  {cat:'cirk', term:'Enkelt och dubbelt kretslopp', def:'Enkelt (fiskar): blodet passerar hjärtat en gång per varv – lägre tryck. Dubbelt (fåglar/däggdjur): blodet passerar hjärtat två gånger (lilla + stora kretsloppet) – högre tryck och effektivitet.'},
+  {cat:'cirk', term:'Öppet och slutet blodkärlssystem', def:'Öppet: blodet lämnar kärlen och blandas med vävnadsvätska (insekter/snäckor). Slutet: blodet stannar inuti kärlen hela tiden (ringmaskar, bläckfiskar, ryggradsdjur).'},
+  {cat:'cirk', term:'Två-, tre-, fyrrummigt hjärta', def:'Tvårummigt (fiskar): ett förmak + en kammare. Trerummigt (groddjur/kräldjur): viss blandning av blod. Fyrrummigt (fåglar/däggdjur): fullständig separation – effektivast.'},
+  {cat:'cirk', term:'Hjärtcykel', def:'Ett komplett hjärtslag med två faser: systole (kamrarnas kontraktion, blod pumpas ut) och diastole (kamrarna slappnar av och fylls).'},
+  {cat:'cirk', term:'Lymfa', def:'Vätska i lymfkärlen. Uppstår från vävnadsvätska (1% av filtrerat plasma som inte återtas av kapillärerna). Återförs till blodet via hålvenen.'},
+  {cat:'cirk', term:'Lymfkärlen', def:'Transporterar lymfa och fetter (kylomikroner) från tarmarna. Liknar vener: tunna väggar och klaffar. Drivs av skelettmuskelrörelser.'},
+  {cat:'cirk', term:'Lymfknutar', def:'Filterstationer längs lymfkärlen fyllda med vita blodkroppar. Filtrerar patogener ur lymfan. Svullnar vid infektion.'},
+  {cat:'cirk', term:'Skillnad i tjocklek: vänster/höger kammare', def:'Vänster kammares vägg är tjockare – pumpar blod runt hela kroppen (högt tryck). Höger kammares vägg är tunnare – pumpar bara till lungorna (kortare, lägre motstånd).'},
+  {cat:'cirk', term:'Hemoglobin', def:'Järnhaltigt protein i röda blodkroppar. Binder O₂ i lungorna (hög O₂, högt pH) och släpper det i aktiva vävnader (lågt pH, hög CO₂). Ger blod dess röda färg.'},
+  {cat:'cirk', term:'Bilirubin', def:'Nedbrytningsprodukt från gamla röda blodkroppar (hemoglobin). Ingår i gallan och ger avföringen dess gulbruna färg. Höga nivåer → gulsot.'},
+];
+
+const CAT_NAMES = { mat:'Matspjälkning', resp:'Respiration', cirk:'Cirkulation' };
+const CAT_COLORS = { mat:'mat', resp:'resp', cirk:'cirk' };
+
+let deck = [];
+let idx = 0;
+let flipped = false;
+let dir = 'term-to-def'; // or 'def-to-term'
+let currentCat = 'all';
+let listVisible = false;
+
+function buildDeck(cat) {
+  currentCat = cat;
+  deck = ALL_CARDS.filter(c => cat === 'all' || c.cat === cat);
+  idx = 0;
+  flipped = false;
+  document.getElementById('cardInner').classList.remove('flipped');
+  document.getElementById('doneOverlay').classList.remove('show');
+  document.getElementById('stage').style.display = 'block';
+  document.querySelectorAll('.nav-btn').forEach(b => b.style.display = 'flex');
+  updateCard();
+  renderGrid();
+}
+
+function shuffle() {
+  for (let i = deck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [deck[i], deck[j]] = [deck[j], deck[i]];
+  }
+  idx = 0;
+  flipped = false;
+  document.getElementById('cardInner').classList.remove('flipped');
+  document.getElementById('doneOverlay').classList.remove('show');
+  document.getElementById('stage').style.display = 'block';
+  updateCard();
+  renderGrid();
+}
+
+function toggleDir() {
+  dir = dir === 'term-to-def' ? 'def-to-term' : 'term-to-def';
+  flipped = false;
+  document.getElementById('cardInner').classList.remove('flipped');
+  const btn = document.getElementById('dirBtn');
+  const lbl = document.getElementById('dirLabel');
+  if (dir === 'term-to-def') {
+    lbl.textContent = 'Begrepp → Förklaring';
+    btn.classList.remove('active-toggle');
+  } else {
+    lbl.textContent = 'Förklaring → Begrepp';
+    btn.classList.add('active-toggle');
+  }
+  updateCard();
+}
+
+function updateCard() {
+  if (idx >= deck.length) {
+    document.getElementById('stage').style.display = 'none';
+    document.querySelectorAll('.nav-btn').forEach(b => b.style.display = 'none');
+    document.getElementById('doneOverlay').classList.add('show');
+    document.getElementById('cur').textContent = deck.length;
+    document.getElementById('progress').style.width = '100%';
+    return;
+  }
+
+  const card = deck[idx];
+  const cc = CAT_COLORS[card.cat];
+  const cardEl = document.getElementById('cardInner').parentElement;
+
+  // Remove cat classes
+  cardEl.classList.remove('cat-mat','cat-resp','cat-cirk');
+  cardEl.classList.add('cat-' + cc);
+
+  const catName = CAT_NAMES[card.cat];
+
+  let frontText, backText;
+  if (dir === 'term-to-def') {
+    frontText = card.term;
+    backText = card.def;
+  } else {
+    frontText = card.def;
+    backText = card.term;
+  }
+
+  document.getElementById('frontCat').textContent = catName;
+  document.getElementById('backCat').textContent = catName;
+  document.getElementById('frontTerm').textContent = frontText;
+  document.getElementById('backDef').innerHTML = highlight(backText);
+
+  document.getElementById('cur').textContent = idx + 1;
+  document.getElementById('total').textContent = deck.length;
+  document.getElementById('progress').style.width = ((idx + 1) / deck.length * 100) + '%';
+
+  document.getElementById('prevBtn').disabled = idx === 0;
+  document.getElementById('nextBtn').disabled = false;
+
+  flipped = false;
+  document.getElementById('cardInner').classList.remove('flipped');
+  renderGrid();
+}
+
+function highlight(text) {
+  return text;
+}
+
+function flipCard() {
+  if (idx >= deck.length) return;
+  flipped = !flipped;
+  document.getElementById('cardInner').classList.toggle('flipped', flipped);
+}
+
+function saveFlashProgress() {
+  try {
+    localStorage.setItem('fysiologi_flash', JSON.stringify({
+      seen: idx + 1, total: deck.length, ts: Date.now()
+    }));
+  } catch(e) {}
+}
+
+function next() {
+  if (idx < deck.length - 1) {
+    idx++;
+    updateCard();
+  } else if (idx === deck.length - 1) {
+    idx++;
+    updateCard(); // triggers done overlay
+  }
+  saveFlashProgress();
+}
+
+function prev() {
+  if (idx > 0) {
+    idx--;
+    updateCard();
+  }
+}
+
+function restart() {
+  idx = 0;
+  flipped = false;
+  document.getElementById('cardInner').classList.remove('flipped');
+  document.getElementById('doneOverlay').classList.remove('show');
+  document.getElementById('stage').style.display = 'block';
+  document.querySelectorAll('.nav-btn').forEach(b => b.style.display = 'flex');
+  updateCard();
+}
+
+function renderGrid() {
+  const grid = document.getElementById('termGrid');
+  if (listVisible) {
+    grid.innerHTML = deck.map((c, i) => {
+      const cls = i === idx ? 'term-chip current-chip' : 'term-chip';
+      return `<button class="${cls}" onclick="jumpTo(${i})">${c.term}</button>`;
+    }).join('');
+    document.getElementById('listCountLabel').textContent = `${deck.length} begrepp`;
+  }
+}
+
+function jumpTo(i) {
+  idx = i;
+  flipped = false;
+  document.getElementById('cardInner').classList.remove('flipped');
+  document.getElementById('doneOverlay').classList.remove('show');
+  document.getElementById('stage').style.display = 'block';
+  document.querySelectorAll('.nav-btn').forEach(b => b.style.display = 'flex');
+  updateCard();
+}
+
+function toggleList() {
+  listVisible = !listVisible;
+  const grid = document.getElementById('termGrid');
+  const btn = document.getElementById('listToggleBtn');
+  if (listVisible) {
+    grid.classList.remove('list-hidden');
+    btn.textContent = 'Dölj lista ↑';
+    renderGrid();
+  } else {
+    grid.classList.add('list-hidden');
+    btn.textContent = 'Visa lista ↓';
+  }
+}
+
+// Tab setup
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => {
+      t.classList.remove('active-mat','active-resp','active-cirk');
+    });
+    const cat = tab.dataset.cat;
+    if (cat === 'all') tab.classList.add('active-mat');
+    else tab.classList.add('active-' + cat);
+    buildDeck(cat);
+  });
+});
+
+// Keyboard
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') next();
+  else if (e.key === 'ArrowLeft') prev();
+  else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+});
+
+// Init
+buildDeck('all');
+</script>
+</body>
+</html>

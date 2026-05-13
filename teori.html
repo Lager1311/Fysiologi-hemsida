@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teori – Fysiologi Gy25</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="site-nav"></div>
+
+<main class="page-wrap" style="max-width:1100px;">
+
+  <header style="margin-bottom:2rem;">
+    <h1 style="font-family:'DM Serif Display',serif; font-size:clamp(1.8rem,5vw,2.6rem); letter-spacing:-0.02em; margin-bottom:0.3rem;">
+      Fysiologi <em style="font-style:italic; color:var(--accent);">Teori</em>
+    </h1>
+    <p style="color:var(--muted); font-size:0.875rem;">Matspjälkning · Respiration · Cirkulation</p>
+  </header>
+
+  <div class="teori-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="teori-sidebar" aria-label="Innehållsförteckning">
+      <div class="search-wrap">
+        <input type="search" class="search-input" id="search-input"
+               placeholder="Sök begrepp…" aria-label="Sök i teorin">
+        <div class="search-count" id="search-count"></div>
+      </div>
+      <nav aria-label="Sektioner">
+        <ul class="sidebar-nav" id="sidebar-nav">
+          <li><a href="#matspjalkning" id="nav-mat">Matspjälkning</a></li>
+          <li><a href="#respiration"   id="nav-resp">Respiration</a></li>
+          <li><a href="#cirkulation"   id="nav-cirk">Cirkulation</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- TEORIINNEHÅLL -->
+    <div class="teori-main" id="teori-main">
+
+      <!-- ══ MATSPJÄLKNING ══════════════════════════════════════ -->
+      <section class="teori-section mat open" id="matspjalkning" aria-labelledby="mat-heading">
+        <div class="teori-section-header" onclick="toggleSection(this)" aria-expanded="true" role="button" tabindex="0">
+          <span class="chip chip-mat" aria-hidden="true">DEL 1</span>
+          <h2 id="mat-heading">Matspjälkning &amp; Näring</h2>
+          <svg class="section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
+        </div>
+        <div class="teori-section-body">
+
+          <div class="teori-sub open">
+            <div class="teori-sub-header" onclick="toggleSub(this)" role="button" tabindex="0" aria-expanded="true">
+              <svg class="sub-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+              <h3>Varför behöver vi bryta ned maten?</h3>
+            </div>
+            <div class="teori-sub-body">
+              <p>Vi människor är <strong>heterotrofer</strong> – vi kan inte tillverka vår egen näring via fotosyntes (som <strong>autotrofer</strong> gör). Vi måste äta organiska ämnen för energi och byggmaterial.</p>
+              <p>Maten är uppbyggd av <em>stora, komplexa molekyler</em> som är för stora för att passera cellmembranets transportproteiner direkt. De måste brytas ned till sina minsta beståndsdelar.</p>
+              <p>Matspjälkning är både <strong>mekanisk</strong> (fysisk sönderdelning) och <strong>kemisk</strong> (enzymatisk nedbrytning).</p>
+            </div>
+          </div>
+
+          <div class="teori-sub">
+            <div class="teori-sub-header" onclick="toggleSub(this)" role="button" tabindex="0" aria-expanded="false">
+              <svg class="sub-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+              <h3>Näring – vad behöver kroppen?</h3>
+            </div>
+            <div class="teori-sub-body">
+              <p><strong>Kolhydrater</strong> är kroppens primära energikälla. Bryts ned till monosackarider (framförallt <strong>glukos</strong>) som förbränns via cellandning till ATP. Kan lagras som <strong>glykogen</strong> i lever och muskler.</p>
+              <p><strong>Fetter</strong> (lipider) är uppbyggda av en <strong>glycerolmolekyl</strong> med upp till tre <strong>fettsyror</strong> (triglycerider). Innehåller ~dubbelt så mycket energi per gram som kolhydrater. Nödvändiga för fettlösliga vitaminer A, D, E, K.</p>
+              <p><strong>Proteiner</strong> är uppbyggda av aminosyror. Av 20 aminosyror är <strong>9 essentiella</strong> – kroppen kan inte tillverka dem och de måste tillföras via kosten. Proteiner fungerar som enzymer, strukturproteiner, transportmolekyler och hormoner.</p>
+              <p><strong>Vitaminer</strong>: <em>vattenlösliga</em> (B, C – lagras inte) och <em>fettlösliga</em> (A, D, E, K – lagras i fettvävnad). D-vitamin kan kroppen bilda med hjälp av solljus.</p>
+              <p><strong>Mineraler</strong> är oorganiska joner (kalcium, järn, natrium). Järn är centralt i hemoglobin; kalcium behövs för muskelkontraktion och skelett.</p>
+              <p><strong>Essentiella näringsämnen</strong> är sådana kroppen inte kan producera själv: 9 aminosyror, 2 fettsyror (omega-3 och omega-6), alla mineraler, praktiskt taget alla vitaminer.</p>
+            </div>
+          </div>
+
+          <div class="teori-sub">
+            <div class="teori-sub-header" onclick="toggleSub(this)" role="button" tabindex="0" aria-expanded="false">
+              <svg class="sub-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+              <h3>Fria radikaler och antioxidanter</h3>
+            </div>
+            <div class="teori-sub-body">
+              <p><strong>Fria radikaler</strong> är molekyler med ett eller flera oparade elektroner. Extremt reaktiva – de "stjäl" elektroner och skadar DNA, proteiner och cellmembran i kedjereaktioner. Bildas vid ämnesomsättning, rökning och UV-strålning.</p>
+              <p><strong>Oxidativ stress</strong> uppstår när fria radikaler överväldigar kroppens försvar.</p>
+              <p><strong>Antioxidanter</strong> (vitamin C, E, betakaroten) neutraliserar fria radikaler genom att avge en elektron utan att själva destabiliseras.</p>
+              <p><em>Paradox:</em> immunförsvaret producerar medvetet fria radikaler (reaktiva syrespecies) för att döda patogener – men de skadar även egna celler.</p>
+            </div>
+          </div>
+
+          <div class="teori-sub">
+            <div class="teori-sub-header" onclick="toggleSub(this)" role="button" tabindex="0" aria-expanded="false">
+              <svg class="sub-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+              <h3>Matspjälkningskanalen – munnen till ändtarmen</h3>
+            </div>
+            <div class="teori-sub-body">
+              <h4>Munhålan</h4>
+              <p>Tänderna utför <strong>mekanisk nedbrytning</strong>. Saliv från spottkörtelarna innehåller <strong>amylas</strong> som börjar bryta ned stärkelse till disackarider. <strong>Struplock (epiglottis)</strong> fälls ned vid sväljning så att mat inte hamnar i luftstrupen.</p>
+
+              <h4>Matstrupen</h4>
+              <p>Mat transporteras via <strong>peristaltiska rörelser</strong> – koordinerade muskelsammandragningar i glatt muskulatur. Tyngdkraften är inte avgörande.</p>
+
+              <h4>Magsäcken</h4>
+              <p>Töjbar påse (~2 liter) där mat bearbetas 2–6 timmar. Producerar <strong>magsaft</strong>:</p>
+              <ul>
+                <li><strong>Saltsyra (HCl)</strong>: sänker pH till ~2, dödar bakterier, denaturerar proteiner</li>
+                <li><strong>Pepsinogen → Pepsin</strong>: inaktivt proenzym från huvudcellerna; aktiveras av HCl till pepsin som bryter ned proteiner</li>
+                <li><strong>Slem</strong>: skyddande alkaliskt lager mot syran</li>
+              </ul>
+              <p><strong>Magsår</strong> uppstår när skyddsystemet sviktar. <strong>Helicobacter pylori</strong> producerar ammoniak och gifter som förstör epitelcellerna.</p>
+
+              <h4>Tunntarmen och tolvfingertarmen</h4>
+              <p>5–7 m lång – platsen för merparten av kemisk nedbrytning och absorption. <strong>Tolvfingertarmen</strong> (duodenum, ~25 cm) tar emot:</p>
+              <ul>
+                <li><strong>Galla</strong> från gallblåsan: gallsalter emulgerar fett mekaniskt (som tvål). <em>Inga enzymer</em> – emulgerar bara.</li>
+                <li><strong>Bukspott</strong> från bukspottkörteln: alkaliskt, innehåller amylas, lipas, proteaser och nukleaser</li>
+              </ul>
+              <p>Nedbrytningskedjan: Kolhydrater (polysackarider → disackarider → monosackarider). Proteiner (→ peptider → aminosyror). Fetter (→ emulgerade droppar → fettsyror + glycerol).</p>
+
+              <h4>Absorption i tunntarmen</h4>
+              <p><strong>Villi</strong> och <strong>mikrovilli</strong> ökar ytan till ~200 m². Inne i varje villus finns blodkapillärer och lymfkärl.</p>
+              <ul>
+                <li><strong>Monosackarider och aminosyror</strong>: aktiv transport in i epitelceller → blodkapillärer</li>
+                <li><strong>Fetter</strong>: fettsyror + glycerol diffunderar in → återbildas → <strong>kylomikroner</strong> → <em>lymfkärlen</em> (för stora för blodkapillärerna)</li>
+              </ul>
+
+              <h4>Tjocktarmen, blindtarmen och ändtarmen</h4>
+              <p><strong>Tjocktarmen</strong>: absorberar vatten och salter; avgör avföringens konsistens. Hyser enorm <strong>normalflora</strong> (symbiotiska bakterier) som bryter ned fibrer och producerar K-vitamin.</p>
+              <p><strong>Blindtarmen</strong> (caecum): hos herbivorer viktig för cellulosanedbrytning. Hos oss: trolig roll i immunförsvaret (reservoar för normalflora).</p>
+              <p><strong>Ändtarmen</strong>: tillfälligt förråd. Kontrolleras av inre (ofrivillig) och yttre (frivillig) sfinkter.</p>
+            </div>
+          </div>
+
+          <div class="teori-sub">
+            <div class="teori-sub-header" onclick="toggleSub(this)" role="button" tabindex="0" aria-expanded="false">
+              <svg class="sub-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+              <h3>Evolutionära anpassningar</h3>
+            </div>
+            <div class="teori-sub-body">
+              <p><strong>Herbivorer</strong>: lång tarm, symbiotiska mikroorganismer med cellulasor. Idisslare har fyra magavdelningar; vommen är en jäsningskammare. β-1,4-bindningar i cellulosa kräver enzymer (cellulasor) som däggdjur saknar.</p>
+              <p><strong>Karnivorer</strong>: kortare tarm (animalisk föda bryts ned enklare).</p>
+              <p><strong>Omnivorer</strong> (som vi): mellanting.</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ══ RESPIRATION ═══════════════════════════════════════ -->
+      <section class="teori-section resp" id="respiration" aria-labelledby="resp-heading">
+        <div class="teori-section-header" onclick="toggleSection(this)" aria-expanded="false" role="button" tabindex="0">
+          <span class="chip chip-resp" aria-hidden="true">DEL 2</span>
+          <h2 id="resp-heading">Respiration &amp; Gasutbyte</h2>
+          <svg class="section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
+        </div>
+        <div class="teori-section-body">
+
+          <div class="teori-sub open">
+            <div class="teori-sub-header" onclick="toggleSub(this)" role="button" tabindex="0" aria-expanded="true">
+              <svg class="sub-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+              <h3>Varför behöver vi andas – gasutbyte via diffusion</h3>
+            </div>
+            <div class="teori-sub-body">
+              <p>Cellandning: <code>C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + energi (ATP)</code></p>
+              <p>Gasutbytet bygger på <strong>diffusion</strong> – spontan rörelse från hög till låg koncentration längs koncentrationsgradienten. O₂ diffunderar från lungor → blod → celler. CO₂ rör sig omvänt.</p>
+            </div>
+          </div>
+
+          <div class="teori-sub">
+            <div class="teori-sub-header" onclick="toggleSub(this)" role="button" tabindex="0" aria-expanded="false">
+              <svg class="sub-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+              <h3>Andningsorganens uppbyggnad</h3>
+            </div>
+            <div class="teori-sub-body">
+              <p><strong>Övre luftvägar</strong>: näshåla och munhåla värmer, fuktar och renar luften. Slem och cilier fångar partiklar och bakterier.</p>
+              <p><strong>Struphuvudet</strong>: innehåller stämmband och struplock (epiglottis) som stänger luftstrupen vid sväljning.</p>
+              <p><strong>Luftstrupen (trakea)</strong>: ~10 cm, hålls öppen av broskringar. Cilier transporterar slem uppåt mot svalget.</p>
+              <p><strong>Bronker</strong>: två grenar (en per lunga) som förgrenar sig i <strong>bronkioler</strong> – allt smalare rör utan brosk.</p>
+              <p><strong>Alveoler</strong> (lungblåsor): tunna säckar (ett celllager) omgivna av kapillärer. 300–500 miljoner alveoler ger total yta ~70–140 m². Diffusionsväg &lt;1 µm.</p>
+            </div>
+          </div>
+
+          <div class="teori-sub">
+            <div class="teori-sub-header" onclick="toggleSub(this)" role="button" tabindex="0" aria-expanded="false">
+              <svg class="sub-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+              <h3>Andningsmekanismen</h3>
+            </div>
+            <div class="teori-sub-body">
+              <p>Lungorna är <em>passiva</em>. Tryckskillnader driver luften:</p>
+              <ul>
+                <li><strong>Inandning</strong>: diafragman kontraherar och sänks → bröstkorgsvolym ökar → tryck sjunker under atmosfärstrycket → luft strömmar in</li>
+                <li><strong>Utandning</strong>: diafragman slappnar av → volym minskar → tryck ökar → luft pressas ut. Normal utandning är <em>passiv</em>.</li>
+              </ul>
+              <p><strong>Lungsäcken</strong>: tvålagers hinna som minskar friktion och håller lungorna expanderade mot bröstkorgen.</p>
+            </div>
+          </div>
+
+          <div class="teori-sub">
+            <div class="teori-sub-header" onclick="toggleSub(this)" role="button" tabindex="0" aria-expanded="false">
+              <svg class="sub-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+              <h3>Lungvolymer</h3>
+            </div>
+            <div class="teori-sub-body">
+              <ul>
+                <li><strong>Tidalvolym (TV)</strong> ~500 ml: normalt andetag</li>
+                <li><strong>Vitalkapacitet (VC)</strong>: max utandning efter max inandning</li>
+                <li><strong>Residualvolym (RV)</strong> ~1,2 L: alltid kvar i lungorna, håller dem öppna</li>
+                <li><strong>Dead-space</strong> ~150 ml: luft i luftvägarna som aldrig når alveolerna</li>
+              </ul>
+              <p>Av ett normalt andetag (500 ml) når bara ~350 ml faktiskt alveolerna.</p>
+            </div>
+          </div>
+
+          <div class="teori-sub">
+            <div class="teori-sub-header" onclick="toggleSub(this)" role="button" tabindex="0" aria-expanded="false">
+              <svg class="sub-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+              <h3>Transport av syre och koldioxid i blodet</h3>
+            </div>
+            <div class="teori-sub-body">
+              <p><strong>Syre</strong>: 98–99% bundet till <strong>hemoglobin (Hb)</strong> inuti röda blodkroppar. Hb binder O₂ effektivt i lungorna (hög O₂-koncentration) och släpper det vid aktiva vävnader (låg O₂, lågt pH) – detta kallas <strong>Bohrs effekt</strong>.</p>
+              <p><strong>Koldioxid</strong> transporteras på tre sätt:</p>
+              <ul>
+                <li>75–80% som <strong>vätekarbonat (HCO₃⁻)</strong>: CO₂ + H₂O → H₂CO₃ → HCO₃⁻ + H⁺</li>
+                <li>10–20% bundet till hemoglobin</li>
+                <li>5–10% löst i blodplasma</li>
+              </ul>
+              <p><strong>Kolmonoxid (CO)</strong>: binder till Hb ~200× starkare än O₂ → blockerar syretransport → kvävning trots tillgängligt syre.</p>
+            </div>
+          </div>
+
+          <div class="teori-sub">
+            <div class="teori-sub-header" onclick="toggleSub(this)" role="button" tabindex="0" aria-expanded="false">
+              <svg class="sub-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+              <h3>Reglering av andningsrytmen</h3>
+            </div>
+            <div class="teori-sub-body">
+              <p><strong>Andningscentrum</strong> i hjärnstammen styr andningsfrekvensen. Det är primärt <em>hög koldioxidhalt</em> (inte låg syrehalt) som ökar andningsfrekvensen.</p>
+              <p>Hög CO₂ → kolsyra bildas → pH sjunker → kemoreceptorer signalerar → andningscentrum ökar frekvens → CO₂ andas ut → pH återställs.</p>
+              <p><strong>Hyperventilering</strong>: andas för snabbt → CO₂ sjunker → andningsdriften försvinner → O₂ sjunker okontrollerat → medvetslöshet utan förvarning. Farligt vid fridykning.</p>
+              <p><strong>Hypoventilering</strong>: andas för långsamt → CO₂ ansamlas → pH sjunker.</p>
+            </div>
+          </div>
+
+          <div class="teori-sub">
+            <div class="teori-sub-header" onclick="toggleSub(this)" role="button" tabindex="0" aria-expanded="false">
+              <svg class="sub-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+              <h3>Gasutbyte hos olika organismer</h3>
+            </div>
+            <div class="teori-sub-body">
+              <p><strong>Huden</strong>: hos små fuktiga organismer (maskar, grodor delvis). Fungerar via enkel diffusion.</p>
+              <p><strong>Gälar</strong>: specialiserade för vattenlevande. Yttre gälar (oskyddade, t.ex. salamanderlarver) vs. inre gälar (skyddade gälkammare hos fiskar). <strong>Motströmningsprincipen</strong>: blod och vatten flödar i motsatta riktningar → konstant gradient längs hela gälen → maximalt effektivt gasutbyte.</p>
+              <p><strong>Trakéer</strong>: insekters luftrörsystem. Luften tas in via spirakler och fördelas direkt till vävnaderna utan blod. Effektivt men sätter storleksgräns för insekter.</p>
+              <p><strong>Fågellungor</strong>: effektivast bland ryggradsdjur. Luftsäckar styr <em>enkelriktat luftflöde</em> genom parabronkiala rör vid BÅDE inandning och utandning – frisk luft alltid vid gasutbytesytan.</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ══ CIRKULATION ═══════════════════════════════════════ -->
+      <section class="teori-section cirk" id="cirkulation" aria-labelledby="cirk-heading">
+        <div class="teori-section-header" onclick="toggleSection(this)" aria-expanded="false" role="button" tabindex="0">
+          <span class="chip chip-cirk" aria-hidden="true">DEL 3</span>
+          <h2 id="cirk-heading">Cirkulation</h2>
+          <svg class="section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
+        </div>
+        <div class="teori-section-body">
+
+          <div class="teori-sub open">
+            <div class="teori-sub-header" onclick="toggleSub(this)" role="button" tabindex="0" aria-expanded="true">
+              <svg class="sub-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+              <h3>Blodets sammansättning</h3>
+            </div>
+            <div class="teori-sub-body">
+              <p>Blod = 55% <strong>blodplasma</strong> + 45% blodkroppar.</p>
+              <p><strong>Blodplasma</strong>: ~90% vatten, proteiner (albumin, fibrinogen), näring, hormoner, avfallsprodukter.</p>
+              <ul>
+                <li><strong>Röda blodkroppar (erytrocyter)</strong>: saknar cellkärna, fyllda med hemoglobin, bikonkav form. Lever ~120 dagar. Nedbrytningsprodukt: bilirubin.</li>
+                <li><strong>Vita blodkroppar (leukocyter)</strong>: immunförsvar, identifierar och bekämpar patogener.</li>
+                <li><strong>Blodplättar (trombocyter)</strong>: koagulering. Aktiveras vid kärlskada → bildar fibrinkoagel med fibrinogen.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="teori-sub">
+            <div class="teori-sub-header" onclick="toggleSub(this)" role="button" tabindex="0" aria-expanded="false">
+              <svg class="sub-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+              <h3>Öppet och slutet blodomlopp</h3>
+            </div>
+            <div class="teori-sub-body">
+              <p><strong>Öppet</strong>: blodet lämnar kärlen och blandas med vävnadsvätska (hemolymfa). Enkelt och energisnålt, lågt tryck. Insekter, snäckor, musslor.</p>
+              <p><strong>Slutet</strong>: blodet stannar inuti kärlen hela tiden. Högt tryck och snabb transport. Ringmaskar, bläckfiskar och alla ryggradsdjur.</p>
+            </div>
+          </div>
+
+          <div class="teori-sub">
+            <div class="teori-sub-header" onclick="toggleSub(this)" role="button" tabindex="0" aria-expanded="false">
+              <svg class="sub-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+              <h3>Enkelt och dubbelt blodomlopp</h3>
+            </div>
+            <div class="teori-sub-body">
+              <p><strong>Enkelt blodomlopp</strong> (fiskar): hjärtat är tvårummigt (ett förmak + en kammare). Blodet passerar hjärtat en gång per varv. Trycket sjunker efter gälarna.</p>
+              <p><strong>Dubbelt blodomlopp</strong> (fåglar, däggdjur): fyrrummigt hjärta med fullständig separation av syrerikt/syrefattigt blod.</p>
+              <ul>
+                <li><strong>Lilla kretsloppet</strong>: höger kammare → lungartär → lungor → lungven → vänster förmak</li>
+                <li><strong>Stora kretsloppet</strong>: vänster kammare → aorta → artärer → kapillärer → vener → hålvener → höger förmak</li>
+              </ul>
+              <p>Vänster kammarvägg är <em>tjockare</em> – pumpar mot hela kroppen (högt motstånd). Höger pumpar bara till lungorna.</p>
+              <p><strong>Groddjur/enkla kräldjur</strong>: trerummigt hjärta – viss blandning av blodet sker.</p>
+            </div>
+          </div>
+
+          <div class="teori-sub">
+            <div class="teori-sub-header" onclick="toggleSub(this)" role="button" tabindex="0" aria-expanded="false">
+              <svg class="sub-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+              <h3>Hjärtat och hjärtcykeln</h3>
+            </div>
+            <div class="teori-sub-body">
+              <p>Hjärtmuskeln (myokardiet) är tvärstrimmig och tröttas inte ut som skelettmuskler.</p>
+              <ul>
+                <li><strong>Systole</strong>: kamrarna kontraherar → blod pumpas ut i artärerna. Ficklaffar öppnas, segelklaffar stängs.</li>
+                <li><strong>Diastole</strong>: kamrarna slappnar av och fylls. Mot slutet kontraherar förmaken för att trycka in extra blod.</li>
+              </ul>
+              <p><strong>Slagvolym</strong> ~70 ml. <strong>Minutvolym</strong> = 70 × 70 ≈ 5 l/min i vila (kan nå ~25 l/min vid hårt arbete).</p>
+              <p><strong>Kranskärl</strong> försörjer hjärtmuskeln med syre. Täpps de till → hjärtinfarkt.</p>
+            </div>
+          </div>
+
+          <div class="teori-sub">
+            <div class="teori-sub-header" onclick="toggleSub(this)" role="button" tabindex="0" aria-expanded="false">
+              <svg class="sub-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+              <h3>Blodkärlens uppbyggnad och funktion</h3>
+            </div>
+            <div class="teori-sub-body">
+              <p><strong>Artärer</strong>: leder blod från hjärtat, tjocka elastiska väggar som buffrar tryckstötar. Arteriolar reglerar blodflödet till organ.</p>
+              <p><strong>Vener</strong>: leder blod till hjärtat, tunnare väggar, lägre tryck, <strong>venklaffar</strong> hindrar bakflöde. <strong>Skelettmuskelpumpen</strong>: muskler klämer samman venerna vid rörelse och driver blodet uppåt.</p>
+              <p><strong>Kapillärer</strong>: ett celllager, enda platsen för verkligt ämnesutbyte. <strong>Sfinktrarna</strong> reglerar flödet till enskilda kapillärnät beroende på vävnadens aktivitet.</p>
+            </div>
+          </div>
+
+          <div class="teori-sub">
+            <div class="teori-sub-header" onclick="toggleSub(this)" role="button" tabindex="0" aria-expanded="false">
+              <svg class="sub-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+              <h3>Ämnesutbyte i kapillärerna och ödem</h3>
+            </div>
+            <div class="teori-sub-body">
+              <p>Vid kapillärernas <em>ingångssida</em>: högt <strong>hydrostatiskt tryck</strong> pressar ut vätska (filtration) till vävnaden.</p>
+              <p>Vid kapillärernas <em>utgångssida</em>: blodproteinernas <strong>osmotiska tryck</strong> suger tillbaka ~99% av vätskan.</p>
+              <p>Kvarvarande 1% = <strong>vävnadsvätska</strong> som dräneras av lymfkärlen.</p>
+              <p><strong>Ödem</strong> uppstår vid: lågt blodprotein (minskat osmotiskt tryck), högt blodtryck (ökad filtration) eller blockerade lymfkärl.</p>
+            </div>
+          </div>
+
+          <div class="teori-sub">
+            <div class="teori-sub-header" onclick="toggleSub(this)" role="button" tabindex="0" aria-expanded="false">
+              <svg class="sub-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+              <h3>Lymfsystemet och blodtryck</h3>
+            </div>
+            <div class="teori-sub-body">
+              <p><strong>Lymfsystemet</strong>: återför vävnadsvätska, transporterar kylomikroner (fett) från tunntarmen, immunförsvar via lymfknutor. Lymfknutorna filtrerar patogener och svullnar vid infektion.</p>
+              <p><strong>Blodtryck</strong>: anges som systoliskt/diastoliskt (t.ex. 120/80 mmHg).</p>
+              <ul>
+                <li>Systoliskt (~120): trycket vid kamrarnas kontraktion</li>
+                <li>Diastoliskt (~80): trycket vid hjärtats vila</li>
+              </ul>
+              <p>Högt blodtryck (hypertoni) skadar kärlväggar och ökar risken för hjärt-kärlsjukdom. Förebyggs med motion, kost och stressreduktion.</p>
+            </div>
+          </div>
+
+          <div class="teori-sub">
+            <div class="teori-sub-header" onclick="toggleSub(this)" role="button" tabindex="0" aria-expanded="false">
+              <svg class="sub-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+              <h3>Homeostas och temperaturreglering</h3>
+            </div>
+            <div class="teori-sub-body">
+              <p><strong>Homeostas</strong>: kroppen upprätthåller ett stabilt inre tillstånd trots yttre förändringar.</p>
+              <p><strong>Endoterma djur</strong> (däggdjur, fåglar): producerar kroppsvärme internt via hög ämnesomsättning. Kräver effektivt cirkulationssystem och fyrrummigt hjärta.</p>
+              <p><strong>Ektoterma djur</strong> (fiskar, reptiler, amfibier): beroende av omgivningstemperaturen. Lägre metabolismkrav.</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </div><!-- /teori-main -->
+  </div><!-- /teori-layout -->
+
+</main>
+
+<script src="js/nav.js"></script>
+<script>
+/* ── Öppna/stäng sektioner ── */
+function toggleSection(header) {
+  const section = header.closest('.teori-section');
+  const isOpen  = section.classList.contains('open');
+  section.classList.toggle('open', !isOpen);
+  header.setAttribute('aria-expanded', String(!isOpen));
+}
+
+function toggleSub(header) {
+  const sub    = header.closest('.teori-sub');
+  const isOpen = sub.classList.contains('open');
+  sub.classList.toggle('open', !isOpen);
+  header.setAttribute('aria-expanded', String(!isOpen));
+}
+
+/* Tangentbordsnavigering för sektions-headers */
+document.querySelectorAll('.teori-section-header, .teori-sub-header').forEach(h => {
+  h.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      h.click();
+    }
+  });
+});
+
+/* ── Sök ── */
+const searchInput = document.getElementById('search-input');
+const searchCount = document.getElementById('search-count');
+
+function clearHighlights() {
+  document.querySelectorAll('mark.search-hl').forEach(m => {
+    m.replaceWith(document.createTextNode(m.textContent));
+  });
+}
+
+function highlightText(node, term) {
+  if (node.nodeType === Node.TEXT_NODE) {
+    const txt = node.textContent;
+    const idx = txt.toLowerCase().indexOf(term);
+    if (idx === -1) return null;
+    const before = document.createTextNode(txt.slice(0, idx));
+    const mark   = document.createElement('mark');
+    mark.className = 'search-hl';
+    mark.textContent = txt.slice(idx, idx + term.length);
+    const after = document.createTextNode(txt.slice(idx + term.length));
+    const frag = document.createDocumentFragment();
+    frag.append(before, mark, after);
+    return frag;
+  }
+  if (node.nodeType === Node.ELEMENT_NODE && node.tagName !== 'MARK') {
+    [...node.childNodes].forEach(child => {
+      const rep = highlightText(child, term);
+      if (rep) node.replaceChild(rep, child);
+    });
+  }
+  return null;
+}
+
+searchInput.addEventListener('input', () => {
+  clearHighlights();
+  const term = searchInput.value.trim().toLowerCase();
+  if (term.length < 2) { searchCount.textContent = ''; return; }
+
+  const main = document.getElementById('teori-main');
+  highlightText(main, term);
+
+  const hits = document.querySelectorAll('mark.search-hl');
+  searchCount.textContent = hits.length > 0 ? `${hits.length} träff${hits.length !== 1 ? 'ar' : ''}` : 'Inga träffar';
+
+  // Öppna sektioner som har träffar
+  hits.forEach(m => {
+    const section = m.closest('.teori-section');
+    const sub     = m.closest('.teori-sub');
+    if (section) {
+      section.classList.add('open');
+      section.querySelector('.teori-section-header').setAttribute('aria-expanded', 'true');
+    }
+    if (sub) {
+      sub.classList.add('open');
+      sub.querySelector('.teori-sub-header').setAttribute('aria-expanded', 'true');
+    }
+  });
+
+  if (hits.length) hits[0].scrollIntoView({ behavior:'smooth', block:'center' });
+});
+
+/* ── Sidebar aktiv sektion vid scroll ── */
+const sections = document.querySelectorAll('.teori-section');
+const navLinks = {
+  matspjalkning: document.getElementById('nav-mat'),
+  respiration:   document.getElementById('nav-resp'),
+  cirkulation:   document.getElementById('nav-cirk'),
+};
+
+function updateActiveNav() {
+  let active = null;
+  sections.forEach(s => {
+    const rect = s.getBoundingClientRect();
+    if (rect.top <= 120) active = s.id;
+  });
+  Object.values(navLinks).forEach(a => {
+    a.className = '';
+  });
+  if (active && navLinks[active]) {
+    const cat = active === 'matspjalkning' ? 'mat' : active === 'respiration' ? 'resp' : 'cirk';
+    navLinks[active].className = 'active-' + cat;
+  }
+}
+
+window.addEventListener('scroll', updateActiveNav, { passive: true });
+updateActiveNav();
+</script>
+
+</body>
+</html>
